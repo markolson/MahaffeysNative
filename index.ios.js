@@ -29,8 +29,12 @@ class MahaffeysReactNative extends Component {
   }
 
   changeUser(userObj) {
-    console.log("Changing User")
-    this.setState({ user: userObj })
+    console.log("Changing User");
+    fetch(`http://www.mahaffeyspub.com/beer/api.php?action=getMembers&member_id=${userObj.id}&beer_list=true`).
+    then((responseText) => responseText.text() ).
+    then((response) => JSON.parse(response) ).
+    then((user) => this.setState({ user: user.members[0] })).
+    then(() => console.log(this.state.user))
   }
 
   render() {
