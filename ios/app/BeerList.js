@@ -74,6 +74,7 @@ export class BeerList extends Component {
 }
 
 BeerList.transform = function(list, user_drank) {
+  console.log("transforming ontap")
   var beers = {};
   list.forEach(function(beer) {
     beers[beer.id] = {

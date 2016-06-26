@@ -8,32 +8,56 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   AsyncStorage,
+  Modal,
   NavigatorIOS,
   StatusBar,
   StyleSheet,
-  Text
+  Text,
+  View
 } from 'react-native';
 
-import {BeerList} from './BeerList'
+import {BeerList} from './ios/app/BeerList'
+import {Settings} from './ios/app/Settings'
 
 class MahaffeysReactNative extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      user: null
+    }
+  }
+
+  changeUser(userObj) {
+    console.log("Changing User")
+  }
+
   render() {
     return (
+      <View style={styles.container}>
       <NavigatorIOS
+        ref="nav"
         style={styles.container}
         initialRoute={{
           component: BeerList,
           title: '100 Beer Club',
-          rightButtonTitle: '🍻',
+          rightButtonTitle: '😶',
           onRightButtonPress: () => {
-            StatusBar.setBarStyle('default');
+            this.refs.nav.push({
+              title: "Settings",
+              component: Settings,
+              backButtonTitle: 'Back',
+              leftButtonIcon: '🍻',
+              passProps: { selectUserCallback: this.changeUser.bind(this), currentUser: null, users: this.state.users }
+            })
           }
         }}
         tintColor="#FFFFFF"
-        barTintColor="#476757"
+        barTintColor="#476757"e
         titleTextColor="#FFFFFF"
         translucent={true}
       />
+      </View>
     );
   }
 }
