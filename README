@@ -1,3 +1,23 @@
+[H] HomeScreen
+  - Header w/ Title : Settings Gear (top right)
+  - Container View
+
+[S] Settings
+  ListView - User Select [U]
+  Untappd Login [T]
+
+[U] UserSelectList
+  ListView with ... users. Maybe a search at top?
+
+[B] BeerList
+  SegmentedControlIOS
+    - On Tap
+    - Undrank (*default)
+    - Drank
+  ListView with beers. Long tap opens Untapped, if logged in
+
+
+
 AsyncStorage.setItem('userID', 3162)
 
 
