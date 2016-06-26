@@ -1,0 +1,20 @@
+AsyncStorage.setItem('userID', 3162)
+
+
+return AsyncStorage.getItem('userID').then(value => {
+  return value;
+});
+
+
+  getInitialState: function() {
+    return { userId: null };
+  },
+
+  componentDidMount() {
+      this.loadUser().done();  
+  },
+
+  async loadUser() {
+    var value = await AsyncStorage.getItem("@Mahaffeys:userId");
+    this.setState({userId: value});
+  },
