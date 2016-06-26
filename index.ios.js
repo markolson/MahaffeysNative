@@ -30,6 +30,7 @@ class MahaffeysReactNative extends Component {
 
   changeUser(userObj) {
     console.log("Changing User")
+    this.setState({ user: userObj })
   }
 
   render() {
@@ -48,7 +49,7 @@ class MahaffeysReactNative extends Component {
               component: Settings,
               backButtonTitle: 'Back',
               leftButtonIcon: '🍻',
-              passProps: { selectUserCallback: this.changeUser.bind(this), currentUser: null, users: this.state.users }
+              passProps: { selectUserCallback: this.changeUser.bind(this), user: this.state.user }
             })
           }
         }}
