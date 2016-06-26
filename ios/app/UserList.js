@@ -5,20 +5,13 @@ import {
   TabBarIOS,
   NavigatorIOS,
   ListView,
+  RecyclerViewBackedScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View
 } from 'react-native';
-
-var hashCode = function(str) {
-  var hash = 15;
-  for (var ii = str.length - 1; ii >= 0; ii--) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(ii);
-  }
-  return hash;
-};
 
 export class UserList extends Component {
 
@@ -46,7 +39,6 @@ export class UserList extends Component {
   }
 
  _renderRow(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
-    var rowHash = Math.abs(hashCode(rowData));
      return (
       <TouchableHighlight onPress={() => {
         highlightRow(sectionID, rowID);
@@ -63,11 +55,13 @@ export class UserList extends Component {
   }
 
   _genRows(data) {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var rows = [];
     Object.keys(data).forEach(function(key) {
       rows.push(data[key]);
     });
-    return this.state.ds.cloneWithRows(rows);
+    console.log('NUMBER OF MEMBERS IS ', rows.length)
+    return ds.cloneWithRows(rows);
   }
 
   render() {
@@ -76,6 +70,12 @@ export class UserList extends Component {
         <ListView
           dataSource={this._genRows(this.state.users)}
           renderRow={this._renderRow.bind(this)}
+          initialListSize={5}
+          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          onEndReached={() => console.log("end is reached")}
+          enableEmptySections={true}
+          removeClippedSubviews={true}
+
         />
       </View>
     );
@@ -83,6 +83,9 @@ export class UserList extends Component {
 }
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -93,6 +96,6 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   number: { 
-    color: '#AAAAAA'
+    color: 'red'
   }
 });

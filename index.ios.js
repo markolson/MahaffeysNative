@@ -26,15 +26,21 @@ class MahaffeysReactNative extends Component {
       users: [],
       user: null
     }
+    this.loadUser();
   }
 
   changeUser(userObj) {
-    console.log("Changing User");
     fetch(`http://www.mahaffeyspub.com/beer/api.php?action=getMembers&member_id=${userObj.id}&beer_list=true`).
     then((responseText) => responseText.text() ).
     then((response) => JSON.parse(response) ).
     then((user) => this.setState({ user: user.members[0] })).
-    then(() => console.log(this.state.user))
+    then((user) => AsyncStorage.setItem('user', JSON.stringify(this.state.user) ))
+  }
+
+  loadUser() {
+    AsyncStorage.getItem('user').then(user => {
+      this.changeUser(JSON.parse(user))
+    });
   }
 
   render() {

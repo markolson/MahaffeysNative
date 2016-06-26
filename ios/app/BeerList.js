@@ -11,14 +11,6 @@ import {
   View
 } from 'react-native';
 
-var hashCode = function(str) {
-  var hash = 15;
-  for (var ii = str.length - 1; ii >= 0; ii--) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(ii);
-  }
-  return hash;
-};
-
 export class BeerList extends Component {
 
   constructor(props) {
@@ -37,8 +29,6 @@ export class BeerList extends Component {
   }
 
  _renderRow(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
-    var rowHash = Math.abs(hashCode(rowData));
-
      return (
       <TouchableHighlight onPress={() => {
         highlightRow(sectionID, rowID);
@@ -68,6 +58,7 @@ export class BeerList extends Component {
       <ListView
         dataSource={this.state.ontap_beers}
         renderRow={this._renderRow}
+        enableEmptySections={true}
       />
     );
   }
@@ -95,6 +86,9 @@ BeerList.beerType = function(t) {
 }
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
