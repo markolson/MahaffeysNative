@@ -71,6 +71,7 @@ export class UserList extends Component {
           dataSource={this._genRows(this.state.users)}
           renderRow={this._renderRow.bind(this)}
           initialListSize={5}
+          pageSize={30}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
           onEndReached={() => console.log("end is reached")}
           enableEmptySections={true}
