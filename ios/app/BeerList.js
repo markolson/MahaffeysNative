@@ -16,17 +16,25 @@ export class BeerList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ontap_beers: this._genRows({})
+      beersLoaded: false,
+      ontap_beers: {},
+      displayBeers: {}
     }
   }
 
   componentDidMount() {
-    console.log("Mounting BeerList")
+    console.log("-- Mounting BeerList")
     fetch('http://www.mahaffeyspub.com/beer/api.php?action=getBeers').
     then((responseText) => responseText.text() ).
     then((response) => JSON.parse(response) ).
     then((ontapList) => BeerList.transform(ontapList.beers, false)).
-    then((beerList) => this.setState({ ontap_beers: this._genRows(beerList) }))
+    then((beerList) => this.setState({ ontap_beers: beerList, displayBeers: beerList, beersLoaded: true }))
+  }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.user && this.state.beersLoaded) {
+      this.setState({ displayBeers: BeerList.addUser(this.state.ontap_beers, newProps.user.beers) })
+    }
   }
 
 
@@ -37,7 +45,7 @@ export class BeerList extends Component {
       }}>
         <View>
           <View style={styles.row}>
-            <Text style={styles.text}>{rowData.name}</Text>
+            <Text style={styles.text}>{rowData.drank ? '🍺 ' : ''}{rowData.name}</Text>
           </View>
         </View>
       </TouchableHighlight>);
@@ -55,15 +63,24 @@ export class BeerList extends Component {
 
 
   render() {
+    console.log("// Rendering BeerList", (this.props.user && this.props.user.name))
     return (
       <ListView
        style={styles.container}
-        dataSource={this.state.ontap_beers}
+        dataSource={this._genRows(this.state.displayBeers)}
         renderRow={this._renderRow}
         enableEmptySections={true}
       />
     );
   }
+}
+
+BeerList.addUser = function(ontap, user_list) {
+  var newBeers = JSON.parse(JSON.stringify(ontap));
+  user_list.forEach(function(beer) {
+    if(newBeers[beer.id]) { newBeers[beer.id].drank = true } 
+  });
+  return newBeers;
 }
 
 BeerList.transform = function(list, user_drank) {

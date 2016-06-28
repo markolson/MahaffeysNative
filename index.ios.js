@@ -46,6 +46,7 @@ class MahaffeysReactNative extends Component {
         this.setState({ settingsIcon: '😄'  }) 
         this.setState({ user: JSON.parse(user) })
         this.changeUser(JSON.parse(user))
+        this.refs.nav.popToTop()
       }
     });
   }
