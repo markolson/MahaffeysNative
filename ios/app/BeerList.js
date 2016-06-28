@@ -7,6 +7,7 @@ import {
   ListView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableHighlight,
   View
 } from 'react-native';
@@ -65,12 +66,13 @@ export class BeerList extends Component {
   render() {
     console.log("// Rendering BeerList", (this.props.user && this.props.user.name))
     return (
+      <View style={styles.container}>
       <ListView
-       style={styles.container}
         dataSource={this._genRows(this.state.displayBeers)}
         renderRow={this._renderRow}
         enableEmptySections={true}
       />
+      </View>
     );
   }
 }
@@ -114,10 +116,6 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     backgroundColor: '#F6F6F6',
-  },
-  thumb: {
-    width: 64,
-    height: 64,
   },
   text: {
     flex: 1,
