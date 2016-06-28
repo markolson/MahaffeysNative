@@ -2,8 +2,7 @@ import React, {
   Component
 } from 'react';
 import {
-  TabBarIOS,
-  NavigatorIOS,
+  AsyncStorage,
   ListView,
   RecyclerViewBackedScrollView,
   StyleSheet,
@@ -21,8 +20,19 @@ export class UserList extends Component {
       ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
       users: {},
       rawusers: {},
-      searchText: ""
+      hidSearch: false
     }
+    this.loadUsers()
+  }
+
+  loadUsers() {
+    AsyncStorage.getItem('users').then(users => {
+      if(users) { 
+        console.log("async loaded")
+        users = JSON.parse(users)
+        this.setState({ rawusers: users, users: users })
+      }
+    });
   }
 
   componentDidMount() {
@@ -31,7 +41,9 @@ export class UserList extends Component {
     then((responseText) => responseText.text() ).
     then((response) => JSON.parse(response) ).
     then((userJSONList) => userJSONList.members, false).
-    then((userList) => this.setState({ rawusers: userList, users: userList }))
+    then((userList) => this.setState({ rawusers: userList, users: userList })).
+    then((user) => AsyncStorage.setItem('users', JSON.stringify(this.state.users) )).
+    then(() => console.log("done downloading user list"))
   }
 
   _pressRow(rowData) {
@@ -43,9 +55,9 @@ export class UserList extends Component {
     if(rowData.search) {
         return <TextInput
           style={styles.search}
-          placeholder="Search.."
-          onChangeText={this._filter.bind(this)}
-          value={this.state.searchText} />
+          placeholder="Name or Number"
+          onChangeText={this._filter.bind(this)} 
+          />
     }
      return (
       <TouchableHighlight onPress={() => {
@@ -62,26 +74,21 @@ export class UserList extends Component {
   }
 
   _filter(searchString) {
-    this.setState({ searchText: searchString }) 
-    if(searchString == "") { this.setState({ users: this.state.rawusers }) }
+    if(searchString == "") { this.setState({ users: this.state.rawusers} ) }
     results = []
     this.state.rawusers.forEach(function(user) {
       search = String(user.id) + user.name
       if(search.indexOf(searchString) > -1) {
         results.push(user)
       }
-      // convert id to string and append to name
-      // take appended.indexOf(searchString)
-      // add to results if either matches
     })
     this.setState({ users: results })
-    //console.log(this.state.rawusers)
   }
 
   _genRows(data) {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var rows = [];
-    if(this.state.users.length > 0) { rows.push({search: true}) }
+    if(this.state.rawusers.length > 0) { rows.push({search: true}) }
     Object.keys(data).forEach(function(key) {
       rows.push(data[key]);
     });
@@ -89,7 +96,8 @@ export class UserList extends Component {
   }
 
   componentDidUpdate() {
-    if(this.refs.list && this.state.users.length > 0 && this.state.searchText.length == 0) {
+    if(this.refs.list && this.state.users.length > 0 && !this.state.hidSearch) {
+      this.setState({ hidSearch: true }) 
       this.refs.list.scrollTo({y: 40})
     }
   }
@@ -129,6 +137,9 @@ var styles = StyleSheet.create({
   },
   search: {
     height: 40,
+    backgroundColor: "#000000",
+    color: '#FFFFFF',
+    paddingLeft: 5
   },
   text: {
     flex: 1,
