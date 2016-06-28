@@ -10,8 +10,6 @@ import {
   Text
 } from 'react-native';
 
-import {UserList} from './UserList'
-
 export class Settings extends Component {
   constructor(props) {
     super(props);
@@ -33,9 +31,11 @@ export class Settings extends Component {
         <View style={styles.group}>
           {this._renderRow(memberTitle, () => {
             this.props.navigator.push({
-              title: "Members",
-              component: UserList,
-              passProps: { selectUserCallback: this.changeUser.bind(this), user: this.props.user }
+              id: 'userSelect',
+              passProps: {
+                selectUserCallback: this.changeUser.bind(this), 
+                user: this.props.user
+              }
             })
           })}
           {this._renderRow("Untappd", () => {

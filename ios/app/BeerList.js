@@ -21,12 +21,14 @@ export class BeerList extends Component {
   }
 
   componentDidMount() {
+    console.log("Mounting BeerList")
     fetch('http://www.mahaffeyspub.com/beer/api.php?action=getBeers').
     then((responseText) => responseText.text() ).
     then((response) => JSON.parse(response) ).
     then((ontapList) => BeerList.transform(ontapList.beers, false)).
     then((beerList) => this.setState({ ontap_beers: this._genRows(beerList) }))
   }
+
 
  _renderRow(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
      return (
@@ -53,9 +55,9 @@ export class BeerList extends Component {
 
 
   render() {
-    console.log("Rendering BeerList")
     return (
       <ListView
+       style={styles.container}
         dataSource={this.state.ontap_beers}
         renderRow={this._renderRow}
         enableEmptySections={true}
@@ -87,6 +89,7 @@ BeerList.beerType = function(t) {
 
 var styles = StyleSheet.create({
   container: {
+    marginTop: 64,
     flex: 1,
   },
   row: {
