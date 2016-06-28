@@ -126,20 +126,22 @@ export class UserList extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 64
+    marginTop: 64,
+    backgroundColor: '#F6F6F6',
   },
   row: {
     height: 40,
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 10,
-    backgroundColor: '#F6F6F6',
   },
   search: {
     height: 40,
-    backgroundColor: "#000000",
-    color: '#FFFFFF',
-    paddingLeft: 5
+    color: '#000000',
+    backgroundColor: '#FFFFFF',
+    paddingLeft: 5,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   text: {
     flex: 1,

@@ -53,13 +53,29 @@ export class BeerList extends Component {
 
   }
 
+  _renderSectionHeader(sectionData, category) {
+    return (
+      <Text style={styles.header}>{category}</Text>
+    )
+  }
+
   _genRows(data) {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var rows = [];
-    Object.keys(data).forEach(function(key) {
-      rows.push(data[key]);
+    var ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     });
-    return ds.cloneWithRows(rows);
+
+    var categories = { 'Draft': [], 'Cask': [], 'Bottle': [] };
+
+    Object.keys(data).forEach(function(key) {
+      var beer = data[key];
+      categories[beer.type].push(beer)
+    });
+    
+    categories['Draft'] = categories['Draft'].sort(function(a,b) { return a.name < b.name ? -1 : 1 })
+    categories['Cask'] = categories['Cask'].sort(function(a,b) { return a.name < b.name ? -1 : 1 })
+    categories['Bottle'] = categories['Bottle'].sort(function(a,b) { return a.name < b.name ? -1 : 1 })
+    return ds.cloneWithRowsAndSections(categories);
   }
 
 
@@ -70,7 +86,7 @@ export class BeerList extends Component {
       <ListView
         dataSource={this._genRows(this.state.displayBeers)}
         renderRow={this._renderRow}
-        enableEmptySections={true}
+        renderSectionHeader={this._renderSectionHeader}
       />
       </View>
     );
@@ -102,7 +118,7 @@ BeerList.transform = function(list, user_drank) {
 
 BeerList.beerType = function(t) {
   if (t == "B") { return "Bottle"; }
-  if (t == "C") { return "Casks"; }
+  if (t == "C") { return "Cask"; }
   if (t == "D") { return "Draft"; }
 }
 
@@ -110,6 +126,12 @@ var styles = StyleSheet.create({
   container: {
     marginTop: 64,
     flex: 1,
+  },
+  header: {
+    textAlign: "center",
+    backgroundColor: "#FFFFFF",
+    color: '#000000',
+    fontWeight: 'bold'
   },
   row: {
     flexDirection: 'row',
