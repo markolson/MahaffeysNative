@@ -87,6 +87,7 @@ export class BeerList extends Component {
         dataSource={this._genRows(this.state.displayBeers)}
         renderRow={this._renderRow}
         renderSectionHeader={this._renderSectionHeader}
+        enableEmptySections={true}
       />
       </View>
     );
@@ -94,10 +95,12 @@ export class BeerList extends Component {
 }
 
 BeerList.addUser = function(ontap, user_list) {
+  console.log("AddingUser")
   var newBeers = JSON.parse(JSON.stringify(ontap));
   user_list.forEach(function(beer) {
     if(newBeers[beer.id]) { newBeers[beer.id].drank = true } 
   });
+  console.log("AddedUser")
   return newBeers;
 }
 
