@@ -14,7 +14,7 @@ export class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.user,
+      user: this.props.user
     }
   }
 

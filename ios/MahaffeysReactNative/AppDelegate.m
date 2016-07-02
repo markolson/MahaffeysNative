@@ -25,6 +25,9 @@
 - (BOOL)application:(__unused UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [AppHub setApplicationID:@"TMBdd9PK8YQ7JUjR6I01"];
+  BOOL debugIsEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"APPHUB_DEBUG"];
+  NSLog(@"Debug enabled: %d", debugIsEnabled);
+  [[AppHub buildManager] setDebugBuildsEnabled:debugIsEnabled];
   
   _bridge = [[RCTBridge alloc] initWithDelegate:self
                                   launchOptions:launchOptions];
@@ -69,7 +72,7 @@
    * on the same Wi-Fi network.
    */
   
-  //  sourceURL = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  sourceURL = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
   
   /**
    * OPTION 2 - AppHub
@@ -82,11 +85,12 @@
    *
    * $ react-native bundle --entry-file index.ios.js --platform ios --dev true --bundle-output iOS/main.jsbundle
    *
-   */
   
   AHBuild *build = [[AppHub buildManager] currentBuild];
   sourceURL = [build.bundle URLForResource:@"main"
                              withExtension:@"jsbundle"];
+   
+   */
   
   return sourceURL;
 }

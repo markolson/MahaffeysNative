@@ -134,7 +134,8 @@ var styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#FFFFFF",
     color: '#000000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 30
   },
   row: {
     flexDirection: 'row',
@@ -143,6 +144,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
   },
   text: {
+    fontSize: 20,
     flex: 1,
   },
 });

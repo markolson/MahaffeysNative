@@ -30,6 +30,7 @@ class MahaffeysReactNative extends Component {
       settingsIcon: '😶'
     }
     this.loadUser();
+    StatusBar.setBarStyle('light-content', true);
   }
 
   changeUser(userObj) {
