@@ -11,6 +11,9 @@
 
 #import "RCTRootView.h"
 
+#import "AppHub.h"
+
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -41,8 +44,16 @@
    * simulator in the "Release" build configuration.
    */
 
-  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
+  [AppHub setApplicationID:@"TMBdd9PK8YQ7JUjR6I01"];
+  
+  
+  AHBuild *build = [[AppHub buildManager] currentBuild];
+  jsCodeLocation = [build.bundle URLForResource:@"main"
+                                  withExtension:@"jsbundle"];
+
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"MahaffeysReactNative"
                                                initialProperties:nil
