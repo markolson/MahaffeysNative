@@ -1,0 +1,8 @@
+node_modules/.bin/apphub build -o build.zip
+
+ curl -X PUT \
+      -H "X-AppHub-Application-ID: TMBdd9PK8YQ7JUjR6I01" \
+      -H "X-AppHub-Application-Secret: ukQUaxEZmYtTTpGmxL738hCnx3GEAJiZS5JSQ9A6" \
+      -H "Content-Type: application/zip" \
+      -L https://api.apphub.io/v1/upload \
+      --upload-file build.zip
