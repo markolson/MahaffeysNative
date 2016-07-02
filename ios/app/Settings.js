@@ -5,17 +5,26 @@ import {
   Modal,
   NavigatorIOS,
   StyleSheet,
+  Switch,
   View,
   TouchableHighlight,
   Text
 } from 'react-native';
 
+var UserDefaults = require('react-native-userdefaults-ios');
+
 export class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.user
+      user: this.props.user,
+      debugBuilds: false
     }
+
+    UserDefaults.boolForKey('APPHUB_DEBUG').then(bool => { 
+      console.log("read status as", bool)
+      this.setState({debugBuilds: bool})
+    });
   }
 
   changeUser(userObj) {
@@ -39,8 +48,18 @@ export class Settings extends Component {
             })
           })}
           {this._renderRow("Untappd", () => {
-            console.log("Nobody")
+            console.log("Nobody");
           })}
+          <View style={styles.row}>
+            <Text style={styles.rowText}>Use Debug Builds</Text>
+            <Switch
+            onValueChange={(value) => { 
+              console.log("Setting value to", value);
+              UserDefaults.setBoolForKey(value, 'APPHUB_DEBUG');
+              this.setState({debugBuilds: value}) 
+            }}
+            value={this.state.debugBuilds} />
+          </View>
         </View>
       </View>
     )

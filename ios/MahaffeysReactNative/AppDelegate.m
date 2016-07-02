@@ -48,6 +48,11 @@
                                                name:AHBuildManagerDidMakeBuildAvailableNotification
                                              object:nil];
   
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(defaultsChanged:)
+                                               name:NSUserDefaultsDidChangeNotification
+                                             object:nil];
+  
   return YES;
   
 }
@@ -72,7 +77,7 @@
    * on the same Wi-Fi network.
    */
   
-  sourceURL = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  //sourceURL = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
   
   /**
    * OPTION 2 - AppHub
@@ -85,12 +90,12 @@
    *
    * $ react-native bundle --entry-file index.ios.js --platform ios --dev true --bundle-output iOS/main.jsbundle
    *
-  
+     */
   AHBuild *build = [[AppHub buildManager] currentBuild];
   sourceURL = [build.bundle URLForResource:@"main"
                              withExtension:@"jsbundle"];
    
-   */
+
   
   return sourceURL;
 }
@@ -121,6 +126,14 @@
     // Show the alert on the main thread.
     [alert show];
   });
+}
+
+- (void)defaultsChanged:(NSNotification *)notification {
+  // Get the user defaults
+  NSUserDefaults *defaults = (NSUserDefaults *)[notification object];
+  [[AppHub buildManager] setDebugBuildsEnabled:(BOOL)[defaults objectForKey:@"APPHUB_DEBUG"]];
+  
+  NSLog(@"Whoa I saw a change %@", [defaults objectForKey:@"APPHUB_DEBUG"]);
 }
 
 #pragma mark - UIAlertViewDelegate

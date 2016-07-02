@@ -8,6 +8,7 @@
   "dependencies": {
     "apphub": "^0.5.1",
     "react": "^15.1.0",
-    "react-native": "0.27.2"
+    "react-native": "0.27.2",
+    "react-native-userdefaults-ios": "^0.1.3"
   }
 }
